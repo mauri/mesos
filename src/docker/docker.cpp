@@ -625,6 +625,11 @@ Try<Docker::RunOptions> Docker::RunOptions::create(
         options.cpuQuota = quota.us();
       }
     }
+    Option<double> disk = resources.get().disk();
+    bool enableDockerDiskQuota = true;
+    if (disk.isSome() && enableDockerDiskQuota) {
+        options.disk = disk.get();
+    }
 
     Option<Bytes> mem = resources.get().mem();
     if (mem.isSome()) {
@@ -960,6 +965,11 @@ Future<Option<int>> Docker::run(
   if (options.memory.isSome()) {
     argv.push_back("--memory");
     argv.push_back(stringify(options.memory->bytes()));
+  }
+  
+  if (options.disk.isSome() && flags.enforce_container_disk_quota) {
+    argv.push_back("--storage-opt");
+    argv.push_back("size=" + stringify(options.disk->bytes()));
   }
 
   foreachpair(const string& key, const string& value, options.env) {

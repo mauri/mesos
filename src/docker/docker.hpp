@@ -198,6 +198,9 @@ public:
 
     // "--memory" option.
     Option<Bytes> memory;
+    
+    // "--opt-storage size" option
+    Option<Bytes> disk;
 
     // Environment variable overrides. These overrides will be passed
     // to docker container through "--env-file" option.
