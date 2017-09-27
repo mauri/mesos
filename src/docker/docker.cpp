@@ -625,7 +625,7 @@ Try<Docker::RunOptions> Docker::RunOptions::create(
         options.cpuQuota = quota.us();
       }
     }
-    Option<double> disk = resources.get().disk();
+    Option<Bytes> disk = resources.get().disk();
     bool enableDockerDiskQuota = true;
     if (disk.isSome() && enableDockerDiskQuota) {
         options.disk = disk.get();
