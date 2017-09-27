@@ -966,8 +966,8 @@ Future<Option<int>> Docker::run(
     argv.push_back("--memory");
     argv.push_back(stringify(options.memory->bytes()));
   }
-  
-  if (options.disk.isSome() && flags.enforce_container_disk_quota) {
+
+  if (options.disk.isSome() && true) {
     argv.push_back("--storage-opt");
     argv.push_back("size=" + stringify(options.disk->bytes()));
   }
