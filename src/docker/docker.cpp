@@ -600,7 +600,8 @@ Try<Docker::RunOptions> Docker::RunOptions::create(
     bool enableCfsQuota,
     const Option<map<string, string>>& env,
     const Option<vector<Device>>& devices,
-    const Option<ContainerDNSInfo>& defaultContainerDNS)
+    const Option<ContainerDNSInfo>& defaultContainerDNS,
+    bool enforceContainerDiskQuota)
 {
   if (!containerInfo.has_docker()) {
     return Error("No docker info found in container info");
@@ -626,8 +627,7 @@ Try<Docker::RunOptions> Docker::RunOptions::create(
       }
     }
     Option<Bytes> disk = resources.get().disk();
-    bool enableDockerDiskQuota = true;
-    if (disk.isSome() && enableDockerDiskQuota) {
+    if (disk.isSome() && enforceContainerDiskQuota) {
         options.disk = disk.get();
     }
 
@@ -967,7 +967,7 @@ Future<Option<int>> Docker::run(
     argv.push_back(stringify(options.memory->bytes()));
   }
 
-  if (options.disk.isSome() && true) {
+  if (options.disk.isSome()) {
     argv.push_back("--storage-opt");
     argv.push_back("size=" + stringify(options.disk->bytes()));
   }

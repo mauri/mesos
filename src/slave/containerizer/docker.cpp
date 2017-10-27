@@ -1351,7 +1351,8 @@ Future<Docker::Container> DockerContainerizerProcess::launchExecutorContainer(
 #endif
         container->environment,
         None(), // No extra devices.
-        flags.docker_mesos_image.isNone() ? flags.default_container_dns : None()
+        flags.docker_mesos_image.isNone() ? flags.default_container_dns : None(),
+        flags.enforce_container_disk_quota
     );
 
     if (runOptions.isError()) {

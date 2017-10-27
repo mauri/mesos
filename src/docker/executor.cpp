@@ -91,7 +91,8 @@ public:
       const string& launcherDir,
       const map<string, string>& taskEnvironment,
       const Option<ContainerDNSInfo>& defaultContainerDNS,
-      bool cgroupsEnableCfs)
+      bool cgroupsEnableCfs,
+      bool enforceContainerDiskQuota)
     : ProcessBase(ID::generate("docker-executor")),
       killed(false),
       terminated(false),
@@ -174,7 +175,8 @@ public:
         cgroupsEnableCfs,
         taskEnvironment,
         None(), // No extra devices.
-        defaultContainerDNS
+        defaultContainerDNS,
+        enforceContainerDiskQuota
     );
 
     if (runOptions.isError()) {
@@ -668,6 +670,7 @@ private:
   map<string, string> taskEnvironment;
   Option<ContainerDNSInfo> defaultContainerDNS;
   bool cgroupsEnableCfs;
+  bool enforceContainerDiskQuota;
 
   Option<KillPolicy> killPolicy;
   Option<Future<Option<int>>> run;
@@ -694,7 +697,8 @@ public:
       const string& launcherDir,
       const map<string, string>& taskEnvironment,
       const Option<ContainerDNSInfo>& defaultContainerDNS,
-      bool cgroupsEnableCfs)
+      bool cgroupsEnableCfs,
+      bool enforceContainerDiskQuota)
   {
     process = Owned<DockerExecutorProcess>(new DockerExecutorProcess(
         docker,
@@ -705,7 +709,8 @@ public:
         launcherDir,
         taskEnvironment,
         defaultContainerDNS,
-        cgroupsEnableCfs));
+        cgroupsEnableCfs,
+        enforceContainerDiskQuota));
 
     spawn(process.get());
   }
