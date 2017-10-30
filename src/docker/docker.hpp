@@ -185,7 +185,8 @@ public:
         bool enableCfsQuota = false,
         const Option<std::map<std::string, std::string>>& env = None(),
         const Option<std::vector<Device>>& devices = None(),
-        const Option<mesos::internal::ContainerDNSInfo>& defaultContainerDNS = None()); // NOLINT(whitespace/line_length)
+        const Option<mesos::internal::ContainerDNSInfo>& defaultContainerDNS = None(),
+        bool enforceContainerDiskQuota = false); // NOLINT(whitespace/line_length)
 
     // "--privileged" option.
     bool privileged;
